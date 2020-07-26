@@ -23,7 +23,7 @@ export const create_dir = async (path: string) => {
  * @param path 
  * @param content 
  */
-export const write_file = async (path: string, content: string) => {
+export async function write_file(path: string, content: string) {
 
     const encoded = encode(content);
     await create(path);
@@ -34,7 +34,7 @@ export const write_file = async (path: string, content: string) => {
  * Returns content of file
  * @param path 
  */
-export const read_file = async (path: string): Promise<string> => {
+export async function read_file(path: string): Promise<string> {
     const data = await readFile(path);
     return decode(data)
 };
@@ -44,7 +44,7 @@ export const read_file = async (path: string): Promise<string> => {
  * exists or not. 
  * @param path path to file
  */
-export const file_exists = async (path: string): Promise<boolean> => {
+export async function file_exists(path: string): Promise<boolean> {
     try {
         await readFile(path);
         return true;
