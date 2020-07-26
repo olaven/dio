@@ -7,7 +7,7 @@ const { create, readFile, writeFile, mkdir, errors } = Deno;
  * Fails silently if directory already 
  * exists. 
  */
-export const create_dir = async (path: string) => {
+export async function create_dir(path: string) {
     try {
         await mkdir(path);
     } catch (error) {
