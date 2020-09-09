@@ -40,6 +40,18 @@ export async function read_file(path: string): Promise<string> {
 };
 
 /**
+ * Append given content to the 
+ * end of file at given path
+ * @param path 
+ * @param content 
+ */
+export async function append_to_file(path: string, content: string) {
+
+    const encoded = encode(content); 
+    await writeFile(path, encoded, { append: true })
+}
+
+/**
  * Returns true or false depending on wether file 
  * exists or not. 
  * @param path path to file
