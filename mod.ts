@@ -1,4 +1,4 @@
-import { decode, encode } from "./deps.ts";
+import { encode, decode } from "./deps.ts"
 
 const { create, readFile, writeFile, mkdir, errors, readDir } = Deno;
 
