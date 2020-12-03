@@ -1,6 +1,6 @@
 import { decode, encode } from "./deps.ts";
 
-const { create, readFile, writeFile, mkdir, errors } = Deno;
+const { create, readFile, writeFile, mkdir, errors, readDir } = Deno;
 
 /**
  * Creates a directory. 
@@ -39,6 +39,29 @@ export async function read_file(path: string): Promise<string> {
     return decode(data)
 };
 
+export async function read_directory(path: string) {
+
+    return Array.from(
+        Deno.readDirSync(path)
+    );
+}
+
+/**
+ * Returns directories in given path
+ * @param path 
+ */
+export async function read_folders(path: string) {
+
+    return (await read_directory(path))
+        .filter(entry => entry.isDirectory)
+};
+
+export async function read_files(path: string) {
+
+    return (await read_directory(path))
+        .filter(entry => entry.isFile)
+};
+
 /**
  * Append given content to the 
  * end of file at given path
@@ -47,7 +70,7 @@ export async function read_file(path: string): Promise<string> {
  */
 export async function append_to_file(path: string, content: string) {
 
-    const encoded = encode(content); 
+    const encoded = encode(content);
     await writeFile(path, encoded, { append: true })
 }
 
