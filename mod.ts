@@ -1,7 +1,12 @@
 const { create, readFile, writeFile, mkdir, errors } = Deno;
 
-const encode = (input: string) => new TextEncoder().encode(input);
-const decode = (input: BufferSource) => new TextDecoder().decode(input);
+export function encode(input: string) {
+  return new TextEncoder().encode(input);
+}
+
+export function decode(input: BufferSource) {
+  return new TextDecoder().decode(input);
+}
 
 /**
  * Creates a directory.
