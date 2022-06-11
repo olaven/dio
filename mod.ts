@@ -1,3 +1,4 @@
+import { copy } from "./deps.ts";
 const { create, readFile, writeFile, mkdir, errors } = Deno;
 
 export function encode(input: string) {
@@ -33,6 +34,37 @@ export async function write_file(path: string, content: string) {
   const encoded = encode(content);
   await create(path);
   await writeFile(path, encoded);
+}
+
+/**
+ * Copies a the content of the `options.source` into
+ * `options.destination`.
+ *
+ * `options.destination` is created if it
+ * does not exist.
+ *
+ */
+export async function copy_dir(options: {
+  source: string;
+  destination: string;
+}) {
+  if (!(await dir_exists(options.destination))) {
+    await create_dir(options.destination);
+  }
+
+  return copy(options.source, options.destination, {
+    overwrite: true,
+    preserveTimestamps: true,
+  });
+}
+
+/**
+ * Returns true or false depending on wether
+ * a directory exists at the path or not.
+ * @param path path to file
+ */
+export async function dir_exists(path: string): Promise<boolean> {
+  return does_exist({ path, probe: read_directory });
 }
 
 /**
@@ -77,8 +109,15 @@ export async function append_to_file(path: string, content: string) {
  * @param path path to file
  */
 export async function file_exists(path: string): Promise<boolean> {
+  return does_exist({ path, probe: read_file });
+}
+
+async function does_exist<T extends Deno.DirEntry[] | string>(options: {
+  path: string;
+  probe: (path: string) => Promise<T>;
+}) {
   try {
-    await readFile(path);
+    await options.probe(options.path);
     return true;
   } catch (error) {
     const does_not_exist = error instanceof errors.NotFound;
